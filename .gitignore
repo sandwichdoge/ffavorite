@@ -1,4 +1,5 @@
 *.o
 *.gch
 *.so
+*.out
 .vscode
