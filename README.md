@@ -16,3 +16,8 @@ Does most of the heavy lifting.
 
 You can cd into a directory, tell it to remember a few files. Then cd to another directory and decide what to do
 with the stored files (e.g. copy/move the stored files to the new directory).
+
+
+#Dependencies
+
+libglib2.0-dev

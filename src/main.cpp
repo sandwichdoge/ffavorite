@@ -5,7 +5,10 @@ int main()
     rememberd *p = new rememberd;
     
     p->init();
-    sleep(50);
+
+    while (1) {
+        sleep(60);
+    }
     
     return 0;
 }

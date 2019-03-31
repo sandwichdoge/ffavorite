@@ -6,7 +6,7 @@
 
 RememberDaemon *rememberd::_gSkel = NULL;
 GMainLoop *rememberd:: _gLoop = NULL;
-std::vector<std::string> rememberd::_files;
+std::vector<std::string> rememberd::_storage;
 
 rememberd::rememberd() {};
 rememberd::~rememberd() {};
@@ -40,7 +40,7 @@ int rememberd::init()
     
     g_print("Owned bus name.\n");
 
-    _files.push_back("None");
+    _storage.push_back("None");
 
     return 0;
 }
@@ -58,6 +58,7 @@ void rememberd::bus_acquired_cb(GDBusConnection *conn, const gchar *name, gpoint
     _gSkel = remember_daemon__skeleton_new();
 
     g_signal_connect(_gSkel, "handle-list", G_CALLBACK(list_cb), NULL);
+    g_signal_connect(_gSkel, "handle-access", G_CALLBACK(access_cb), NULL);
     g_signal_connect(_gSkel, "handle-add", G_CALLBACK(add_cb), NULL);
     g_signal_connect(_gSkel, "handle-rm", G_CALLBACK(rm_cb), NULL);
 
@@ -92,8 +93,8 @@ gboolean rememberd::list_cb(RememberDaemon *object, GDBusMethodInvocation *invoc
     
     std::string s = "";
 
-    for (int i = 0; i < _files.size(); i++) {
-        s += std::to_string(i) + "." + _files[i] + "\n";
+    for (int i = 0; i < _storage.size(); i++) {
+        s += std::to_string(i) + "." + _storage[i] + "\n";
     }
 
     remember_daemon__complete_list(object, invocation, s.c_str());
@@ -102,10 +103,33 @@ gboolean rememberd::list_cb(RememberDaemon *object, GDBusMethodInvocation *invoc
 }
 
 
+gboolean rememberd::access_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, guint arg_index)
+{
+    g_print("Sending item %d.\n", arg_index);
+
+    std::string result = "";
+
+    if (arg_index < _storage.size())
+    {
+        result = _storage[arg_index];
+    }
+    else
+    {
+        g_print("Index exceeds number of stored items.");
+        result = "REMEMBER DAEMON ERROR: INDEX TOO HIGH.";
+    }
+
+    remember_daemon__complete_access(object, invocation, result.c_str());
+
+    return TRUE;
+}
+
+
+
 gboolean rememberd::add_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_filename)
 {
     std::string file = std::string(arg_filename);
-    _files.push_back(file);
+    _storage.push_back(file);
 
     remember_daemon__complete_add(object, invocation);
 
@@ -117,10 +141,10 @@ gboolean rememberd::rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocat
 {
     std::string target(arg_filename);
 
-    for (int i = 0; i < _files.size(); i++) {
-        if (_files[i] == target) {
+    for (int i = 0; i < _storage.size(); i++) {
+        if (_storage[i] == target) {
             //g_print("Forgetting target %s.\n", arg_filename);
-            _files.erase(_files.begin() + i);
+            _storage.erase(_storage.begin() + i);
         }
     }
 
