@@ -1,0 +1,13 @@
+<node>
+	<interface name="org.tfman">
+	<signal name="mysignal">
+		<arg type="i" name="ret"/>
+	</signal>
+	<method name="list">
+		<arg type="s" name="files" direction="out"/>
+	</method>
+	<method name="add">
+		<arg type="s" name="filename" direction="in"/>
+	</method>
+	</interface>
+</node>
