@@ -1,7 +1,8 @@
-#include "../gen/tfmand.h"
+#include "../gen/rememberd.h"
+#include <string>
 
-#define TFMAN_DBUS "tfman.service"
-#define TFMAN_DBUS_PATH "/tfman/service"
+#define TFMAN_DBUS "remember.service"
+#define TFMAN_DBUS_PATH "/remember/service"
 
 class client
 {
@@ -12,17 +13,17 @@ class client
         int init();
         static int uinit();
 
+        /*Our functions*/
+        std::string getFileList();
+        int addFile(std::string path);
+        int removeFile(std::string path);
+
     private:
         /*Ritual D-Bus stuff*/
-        GDbusConnection *_gConn;
+        GDBusConnection *_gConn;
         static GMainLoop *_gLoop;
-        TerminalFileManager *_gProxy;
+        RememberDaemon *_gProxy;
 
         static void *startGLoop(void *);
-        
-        /*Our functions*/
-        static std::string getFileList();
-        static bool addFile(std::string path);
-        static bool removeFile(std::string path);
 
 };

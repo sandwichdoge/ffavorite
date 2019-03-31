@@ -1,10 +1,10 @@
-APPNAME=tfmand
+APPNAME=rememberd
 
 GIO_CFLAGS=-I/usr/include/gio-unix-2.0/ -I/usr/include/glib-2.0/ -I/usr/lib/x86_64-linux-gnu/glib-2.0/include/      
 GIO_LIBS=-L/usr/local/lib  -lgio-2.0 -lgobject-2.0 -lgmodule-2.0   -lglib-2.0 -lrt
 
 all:
-	/usr/bin/gdbus-codegen --interface org.tfman --c-namespace TerminalFileManager --generate-c-code $(APPNAME) $(APPNAME).xml
+	/usr/bin/gdbus-codegen --interface org.remember --c-namespace RememberDaemon --generate-c-code $(APPNAME) $(APPNAME).xml
 	gcc -fPIC -shared $(GIO_CFLAGS) $(GIO_LIBS) $(APPNAME).c -o lib$(APPNAME).so
 	sudo cp lib$(APPNAME).so /usr/lib
 

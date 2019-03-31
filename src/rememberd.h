@@ -1,17 +1,17 @@
-#include "../gen/tfmand.h"
+#include "../gen/rememberd.h"
 #include <vector>
 #include <string>
 
-#define TFMAN_DBUS "tfman.service"
-#define TFMAN_DBUS_PATH "/tfman/service"
+#define TFMAN_DBUS "remember.service"
+#define TFMAN_DBUS_PATH "/remember/service"
 
 
 
-class tfmand
+class rememberd
 {
     public:
-        tfmand();
-        virtual ~tfmand();
+        rememberd();
+        virtual ~rememberd();
 
         int init();
         static int uinit();
@@ -25,12 +25,12 @@ class tfmand
         static void* startGLoop(void *args);
 
         static GMainLoop *_gLoop;
-        static TerminalFileManager *_gSkel ;
+        static RememberDaemon *_gSkel;
 
         /*Actual data*/
-        static gboolean list_files(TerminalFileManager *object, GDBusMethodInvocation *invocation);
-        static gboolean add_file(TerminalFileManager *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
-        static gboolean rm_file(TerminalFileManager *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
+        static gboolean list_cb(RememberDaemon *object, GDBusMethodInvocation *invocation);
+        static gboolean add_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
+        static gboolean rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
 
         static std::vector<std::string> _files; // Stack of saved file paths.
 
