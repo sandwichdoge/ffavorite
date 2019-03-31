@@ -16,7 +16,11 @@ tfmand::~tfmand() {};
 
 int tfmand::uinit()
 {
-
+    g_main_loop_quit(_gLoop);
+    g_main_loop_unref(_gLoop);
+    _gLoop = NULL;
+    
+    return 0;
 }
 
 int tfmand::init()
@@ -55,10 +59,14 @@ void tfmand::bus_acquired_cb(GDBusConnection *conn, const gchar *name, gpointer 
     _gSkel = terminal_file_manager__skeleton_new();
 
     g_signal_connect(_gSkel, "handle-list", G_CALLBACK(list_files), NULL);
+    g_signal_connect(_gSkel, "handle-add", G_CALLBACK(add_file), NULL);
+    g_signal_connect(_gSkel, "handle-rm", G_CALLBACK(rm_file), NULL);
+
     g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(_gSkel), conn, TFMAN_DBUS_PATH, &err);
 
     if (err != NULL) {
         g_print("Problem exporting skel %s.", err->message);
+        g_error_free(err);
         g_main_loop_quit(_gLoop);
     }
 
@@ -84,10 +92,40 @@ gboolean tfmand::list_files(TerminalFileManager *object, GDBusMethodInvocation *
     std::string s = "";
 
     for (int i = 0; i < _files.size(); i++) {
-        s += std::to_string(i) + "." + _files[i];
+        s += std::to_string(i) + "." + _files[i] + "\n";
     }
 
     terminal_file_manager__complete_list(object, invocation, s.c_str());
+
+    return TRUE;
+}
+
+
+gboolean tfmand::add_file(TerminalFileManager *object, GDBusMethodInvocation *invocation, const gchar *arg_filename)
+{
+    std::string file = std::string(arg_filename);
+    _files.push_back(file);
+
+    terminal_file_manager__complete_add(object, invocation);
+
+    return TRUE;
+}
+
+
+gboolean tfmand::rm_file(TerminalFileManager *object, GDBusMethodInvocation *invocation, const gchar *arg_filename)
+{
+    std::string target(arg_filename);
+
+    for (int i = 0; i < _files.size(); i++) {
+        if (_files[i] == target) {
+            //g_print("Forgetting target %s.\n", arg_filename);
+            _files.erase(_files.begin() + i);
+        }
+    }
+
+    terminal_file_manager__complete_rm(object, invocation);
+
+    return TRUE;
 }
 
 

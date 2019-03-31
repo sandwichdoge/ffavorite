@@ -1,4 +1,4 @@
-#include "gen/tfmand.h"
+#include "../gen/tfmand.h"
 #include <vector>
 #include <string>
 
@@ -30,7 +30,8 @@ class tfmand
         /*Actual data*/
         static gboolean list_files(TerminalFileManager *object, GDBusMethodInvocation *invocation);
         static gboolean add_file(TerminalFileManager *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
-        
+        static gboolean rm_file(TerminalFileManager *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
+
         static std::vector<std::string> _files; // Stack of saved file paths.
 
 };

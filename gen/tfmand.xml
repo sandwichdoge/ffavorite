@@ -9,5 +9,8 @@
 	<method name="add">
 		<arg type="s" name="filename" direction="in"/>
 	</method>
+	<method name="rm">
+		<arg type="s" name="filename" direction="in"/>
+	</method>
 	</interface>
 </node>
