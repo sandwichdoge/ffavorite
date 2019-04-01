@@ -1,6 +1,77 @@
 #include "tfmanctl.h"
 #include <iostream>
 #include <getopt.h>
+#include <unistd.h>
+
+
+int expandFilePath(std::string &path)
+{
+    char tmp[1024];
+    if (getcwd(tmp, sizeof(tmp)) == NULL) {
+        return -1;
+    }
+
+    if (path[0] != '/' && path.substr(0,2) != "./" && path.substr(0,3) != "../") {
+        path = "./" + path;
+    }
+
+    std::string cwd(tmp);
+
+    if (path == "..") { // Previous dir
+        if (cwd == "/") {
+            path = "/";
+        }
+        else
+        {
+            size_t pos = cwd.rfind("/");
+            cwd.resize(pos);
+            path = cwd;
+        }
+    }
+    else if (path.substr(0, 3) == "../") {
+        if (cwd == "/") {
+            path = "/";
+        }
+        else
+        {
+            size_t pos = cwd.rfind("/");
+            cwd.resize(pos);
+            path.replace(0, 3, cwd + "/");
+        }
+    }
+    else if (path == ".") { // Current dir
+        path = cwd;
+    }
+    else if (path.substr(0, 2) == "./") {
+        path.replace(0, 2, cwd + "/");
+    }
+
+    // Traverse path, handle meaningless .. and . symbols within path
+    size_t start = 0;
+    size_t slash = 0; // Position of current slash symbol.
+    size_t len = 0;
+
+    do {
+        slash = path.find("/", start);
+        if (slash == std::string::npos) break;
+        
+        start = path.find("/", slash + 1);
+
+        if (path.substr(slash, start - slash) == "/..") {
+            slash = path.rfind("/", slash - 1);
+            path.erase(slash, start - slash);
+            start = slash;
+        }
+        else if (path.substr(slash, start - slash) == "/.") {
+            path.erase(slash, start - slash);
+            start = slash;
+        }
+
+    } while (slash != std::string::npos);
+
+
+    return 0;
+}
 
 
 int main(int argc, char *argv[])
@@ -43,15 +114,15 @@ int main(int argc, char *argv[])
 
                     target = std::string(argv[index]);
 
-                    /*Handle relative file path here*/
+                    /*Handle relative file path + expand '.' here*/
+                    expandFilePath(target);
 
                     status = p->addFile(target);
-                    std::cout << "File added " << (status == 0 ? "successfully.\n" : "unsuccessfully.\n");
+                    std::cout << target << " added " << (status == 0 ? "successfully.\n" : "unsuccessfully.\n");
                     index++;
+
                 }
                 optind = index - 1;
-
-                std::cout << optind << "\n";
             }
                 break;
             case 'r':

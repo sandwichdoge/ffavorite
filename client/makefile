@@ -9,4 +9,4 @@ tfmanctl.o: tfmanctl.cpp tfmanctl.h
 	g++ -c $^ $(INCL_DBUS) $(LIBS_DBUS)
 
 clean:
-	rm *.out *.o *.gch tfmanctl
+	rm *.out *.o *.gch
