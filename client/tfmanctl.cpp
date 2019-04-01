@@ -82,6 +82,21 @@ int client::getFileList(std::vector<std::string> &v)
 }
 
 
+std::string client::accessIndex(unsigned int i)
+{
+    GError *err = NULL;
+    char *filename = NULL;
+    remember_daemon__call_access_sync(_gProxy, i, &filename, NULL, &err);
+    if (err || filename == NULL) {
+        g_print("%s\n", err->message);
+        g_error_free(err);
+        return "";
+    }
+
+    return std::string(filename);
+}
+
+
 int client::addFile(std::string path)
 {
     GError *err = NULL;
@@ -89,6 +104,7 @@ int client::addFile(std::string path)
     remember_daemon__call_add_sync(_gProxy, path.c_str(), NULL, &err);
     if (err) {
         g_print("%s\n", err->message);
+        g_error_free(err);
         return -1;
     }
 
@@ -103,6 +119,7 @@ int client::removeFile(std::string path)
     remember_daemon__call_rm_sync(_gProxy, path.c_str(), NULL, &err);
     if (err) {
         g_print("%s\n", err->message);
+        g_error_free(err);
         return -1;
     }
 

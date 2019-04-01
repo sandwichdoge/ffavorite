@@ -133,10 +133,10 @@ gboolean rememberd::access_cb(RememberDaemon *object, GDBusMethodInvocation *inv
     else
     {
         g_print("Index exceeds number of stored items.");
-        result = "REMEMBER DAEMON ERROR: INDEX TOO HIGH.";
+        result = "INDEX_ERROR";
     }
 
-    remember_daemon__complete_access(object, invocation, result.c_str());
+    remember_daemon__complete_access(object, invocation, (const gchar*)result.c_str());
 
     return TRUE;
 }

@@ -17,6 +17,7 @@ class client
         /*Our functions*/
         std::string getFormattedFileList();
         int getFileList(std::vector<std::string> &v);
+        std::string accessIndex(unsigned int i);
         int addFile(std::string path);
         int removeFile(std::string path);
 
