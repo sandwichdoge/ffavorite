@@ -1,5 +1,6 @@
 #include "../gen/rememberd.h"
 #include <string>
+#include <vector>
 
 #define TFMAN_DBUS "remember.service"
 #define TFMAN_DBUS_PATH "/remember/service"
@@ -15,7 +16,7 @@ class client
 
         /*Our functions*/
         std::string getFormattedFileList();
-        int getFileList();
+        int getFileList(std::vector<std::string> &v);
         int addFile(std::string path);
         int removeFile(std::string path);
 

@@ -1,4 +1,6 @@
 #include "tfmanctl.h"
+#include <iostream>
+
 
 GMainLoop *client::_gLoop = NULL;
 
@@ -62,12 +64,19 @@ std::string client::getFormattedFileList()
 }
 
 
-int client::getFileList()
+int client::getFileList(std::vector<std::string> &v)
 {
     GError *err = NULL;
-    GVariant *out = NULL;
+    char **out = NULL;
+
+    v.clear();
 
     remember_daemon__call_list_sync(_gProxy, &out, NULL, &err);
+    if (err || out == NULL) return -1;
+
+    for (int i = 0; out[i]; i++) {
+        v.push_back(std::string(out[i]));
+    }
 
     return 0;
 }

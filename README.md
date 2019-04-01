@@ -18,6 +18,23 @@ You can cd into a directory, tell it to remember a few files. Then cd to another
 with the stored files (e.g. copy/move the stored files to the new directory).
 
 
-#Dependencies
+# Dependencies
 
 libglib2.0-dev
+
+# Build
+```
+$git clone git@github.com:sandwichdoge/tfman.git
+$make
+```
+
+# Run daemon
+```
+$cd tfman/src
+$./rememberd &
+```
+
+# Run client
+```
+Coming soon
+```

@@ -12,7 +12,8 @@ int main()
     files = p->getFormattedFileList();
     std::cout << files;
 
-    p->getFileList();
+    std::vector<std::string> v;
+    p->getFileList(v);
 
     p->uinit();
     return 0;
