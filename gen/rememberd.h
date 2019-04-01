@@ -50,7 +50,7 @@ struct _RememberDaemonIface
   gboolean (*handle_rm) (
     RememberDaemon *object,
     GDBusMethodInvocation *invocation,
-    const gchar *arg_filename);
+    guint arg_index);
 
   void (*mysignal) (
     RememberDaemon *object,
@@ -86,7 +86,8 @@ void remember_daemon__complete_add (
 
 void remember_daemon__complete_rm (
     RememberDaemon *object,
-    GDBusMethodInvocation *invocation);
+    GDBusMethodInvocation *invocation,
+    const gchar *filename);
 
 
 
@@ -174,19 +175,21 @@ gboolean remember_daemon__call_add_sync (
 
 void remember_daemon__call_rm (
     RememberDaemon *proxy,
-    const gchar *arg_filename,
+    guint arg_index,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
     gpointer user_data);
 
 gboolean remember_daemon__call_rm_finish (
     RememberDaemon *proxy,
+    gchar **out_filename,
     GAsyncResult *res,
     GError **error);
 
 gboolean remember_daemon__call_rm_sync (
     RememberDaemon *proxy,
-    const gchar *arg_filename,
+    guint arg_index,
+    gchar **out_filename,
     GCancellable *cancellable,
     GError **error);
 

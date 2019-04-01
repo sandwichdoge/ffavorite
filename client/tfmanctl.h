@@ -19,7 +19,7 @@ class client
         int getFileList(std::vector<std::string> &v);
         std::string accessIndex(unsigned int i);
         int addFile(std::string path);
-        int removeFile(std::string path);
+        int removeFile(unsigned int index, std::string &out);
 
     private:
         /*Ritual D-Bus stuff*/

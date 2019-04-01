@@ -136,7 +136,7 @@ gboolean rememberd::access_cb(RememberDaemon *object, GDBusMethodInvocation *inv
         result = "INDEX_ERROR";
     }
 
-    remember_daemon__complete_access(object, invocation, (const gchar*)result.c_str());
+    remember_daemon__complete_access(object, invocation, result.c_str());
 
     return TRUE;
 }
@@ -154,18 +154,15 @@ gboolean rememberd::add_cb(RememberDaemon *object, GDBusMethodInvocation *invoca
 }
 
 
-gboolean rememberd::rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_filename)
+gboolean rememberd::rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, unsigned arg_index)
 {
-    std::string target(arg_filename);
+    if (arg_index >= _storage.size()) return FALSE;
 
-    for (int i = 0; i < _storage.size(); i++) {
-        if (_storage[i] == target) {
-            //g_print("Forgetting target %s.\n", arg_filename);
-            _storage.erase(_storage.begin() + i);
-        }
-    }
+    std::string target = _storage[arg_index];
 
-    remember_daemon__complete_rm(object, invocation);
+    _storage.erase(_storage.begin() + arg_index);
+
+    remember_daemon__complete_rm(object, invocation, target.c_str());
 
     return TRUE;
 }

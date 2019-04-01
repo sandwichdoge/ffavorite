@@ -1,24 +1,25 @@
 #include "tfmanctl.h"
 #include <iostream>
-
+#include <getopt.h>
 
 
 int main(int argc, char *argv[])
 {
     client *p = new client;
     p->init();
-    int status = 0;
 
-    int opt; 
-    while((opt = getopt(argc, argv, "ilar:")) != -1)  
+    int status = 0; // operation status
+    unsigned int i = 0; // -l access index
+
+    int opt;
+    while((opt = getopt(argc, argv, "i:la:r:")) != -1)  
     {  
         switch(opt)  
         {
             case 'i':
             {
                 /*Access Index*/
-                unsigned int i = 0;
-                printf("%d\n", optarg);
+                sscanf(optarg, "%u", &i);
                 std::string filename = p->accessIndex(i);
                 if (filename == "") std::cout << "ERROR\n";
                 else std::cout << filename << "\n";
@@ -32,18 +33,34 @@ int main(int argc, char *argv[])
                 break;
             case 'a':
             {
-                std::cout << "request a";
-                printf("%s\n", optarg);
-                //std::string target(optarg);
-                //status = p->addFile(target);
-                //std::cout << "Add file status:" << status << ".\n";
+                std::string target = "";
+
+                int index = optind - 1; // optarg, 1 in this case
+                while (index < argc) {
+                    if (argv[index][0] == '-') {
+                        break;
+                    }
+
+                    target = std::string(argv[index]);
+
+                    /*Handle relative file path here*/
+
+                    status = p->addFile(target);
+                    std::cout << "File added " << (status == 0 ? "successfully.\n" : "unsuccessfully.\n");
+                    index++;
+                }
+                optind = index - 1;
+
+                std::cout << optind << "\n";
             }
                 break;
             case 'r':
             {
-                std::string target = std::string(optarg);
-                status = p->removeFile(target);
-                std::cout << "Remove file status:" << status << ".\n";
+                sscanf(optarg, "%d", &i);
+
+                std::string removedFile = "";
+                status = p->removeFile(i, removedFile);
+                std::cout << "Removed " << removedFile << (status == 0 ? " successfully.\n" : "unsuccessfully.\n") << ".\n";
             }
                 break;
         }  

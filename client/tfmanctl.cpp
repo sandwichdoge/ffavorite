@@ -36,7 +36,6 @@ int client::init()
 	// Register callback function to handle mysignal received from server
 	//g_signal_connect(_proxy, "mysignal", G_CALLBACK(handle_mysignal), NULL);
 
-	g_print("Initialized.\n");
 }
 
 int client::uinit()
@@ -112,16 +111,21 @@ int client::addFile(std::string path)
 }
 
 
-int client::removeFile(std::string path)
+int client::removeFile(unsigned int index, std::string &out)
 {
     GError *err = NULL;
+    char *target = NULL;
+    
+    out.clear();
 
-    remember_daemon__call_rm_sync(_gProxy, path.c_str(), NULL, &err);
+    remember_daemon__call_rm_sync(_gProxy, index, &target, NULL, &err);
     if (err) {
         g_print("%s\n", err->message);
         g_error_free(err);
         return -1;
     }
+
+    out = std::string(target);
 
     return 0;
 }

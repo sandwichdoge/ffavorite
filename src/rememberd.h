@@ -32,7 +32,7 @@ class rememberd
         static gboolean list_fmt_cb(RememberDaemon *object, GDBusMethodInvocation *invocation);
         static gboolean access_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, guint arg_index);
         static gboolean add_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
-        static gboolean rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
+        static gboolean rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, unsigned index);
 
         static std::vector<std::string> _storage; // Stack of saved file paths.
 

@@ -300,7 +300,24 @@ static const _ExtendedGDBusMethodInfo _remember_daemon__method_info_add =
   FALSE
 };
 
-static const _ExtendedGDBusArgInfo _remember_daemon__method_info_rm_IN_ARG_filename =
+static const _ExtendedGDBusArgInfo _remember_daemon__method_info_rm_IN_ARG_index =
+{
+  {
+    -1,
+    (gchar *) "index",
+    (gchar *) "u",
+    NULL
+  },
+  FALSE
+};
+
+static const _ExtendedGDBusArgInfo * const _remember_daemon__method_info_rm_IN_ARG_pointers[] =
+{
+  &_remember_daemon__method_info_rm_IN_ARG_index,
+  NULL
+};
+
+static const _ExtendedGDBusArgInfo _remember_daemon__method_info_rm_OUT_ARG_filename =
 {
   {
     -1,
@@ -311,9 +328,9 @@ static const _ExtendedGDBusArgInfo _remember_daemon__method_info_rm_IN_ARG_filen
   FALSE
 };
 
-static const _ExtendedGDBusArgInfo * const _remember_daemon__method_info_rm_IN_ARG_pointers[] =
+static const _ExtendedGDBusArgInfo * const _remember_daemon__method_info_rm_OUT_ARG_pointers[] =
 {
-  &_remember_daemon__method_info_rm_IN_ARG_filename,
+  &_remember_daemon__method_info_rm_OUT_ARG_filename,
   NULL
 };
 
@@ -323,7 +340,7 @@ static const _ExtendedGDBusMethodInfo _remember_daemon__method_info_rm =
     -1,
     (gchar *) "rm",
     (GDBusArgInfo **) &_remember_daemon__method_info_rm_IN_ARG_pointers,
-    NULL,
+    (GDBusArgInfo **) &_remember_daemon__method_info_rm_OUT_ARG_pointers,
     NULL
   },
   "handle-rm",
@@ -539,7 +556,7 @@ remember_daemon__default_init (RememberDaemonIface *iface)
    * RememberDaemon::handle-rm:
    * @object: A #RememberDaemon.
    * @invocation: A #GDBusMethodInvocation.
-   * @arg_filename: Argument passed by remote caller.
+   * @arg_index: Argument passed by remote caller.
    *
    * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-remember.rm">rm()</link> D-Bus method.
    *
@@ -556,7 +573,7 @@ remember_daemon__default_init (RememberDaemonIface *iface)
     g_cclosure_marshal_generic,
     G_TYPE_BOOLEAN,
     2,
-    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_STRING);
+    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_UINT);
 
   /* GObject signals for received D-Bus signals: */
   /**
@@ -996,7 +1013,7 @@ _out:
 /**
  * remember_daemon__call_rm:
  * @proxy: A #RememberDaemonProxy.
- * @arg_filename: Argument to pass with the method invocation.
+ * @arg_index: Argument to pass with the method invocation.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
@@ -1010,15 +1027,15 @@ _out:
 void
 remember_daemon__call_rm (
     RememberDaemon *proxy,
-    const gchar *arg_filename,
+    guint arg_index,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
     gpointer user_data)
 {
   g_dbus_proxy_call (G_DBUS_PROXY (proxy),
     "rm",
-    g_variant_new ("(s)",
-                   arg_filename),
+    g_variant_new ("(u)",
+                   arg_index),
     G_DBUS_CALL_FLAGS_NONE,
     -1,
     cancellable,
@@ -1029,6 +1046,7 @@ remember_daemon__call_rm (
 /**
  * remember_daemon__call_rm_finish:
  * @proxy: A #RememberDaemonProxy.
+ * @out_filename: (out): Return location for return parameter or %NULL to ignore.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to remember_daemon__call_rm().
  * @error: Return location for error or %NULL.
  *
@@ -1039,6 +1057,7 @@ remember_daemon__call_rm (
 gboolean
 remember_daemon__call_rm_finish (
     RememberDaemon *proxy,
+    gchar **out_filename,
     GAsyncResult *res,
     GError **error)
 {
@@ -1047,7 +1066,8 @@ remember_daemon__call_rm_finish (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "()");
+                 "(s)",
+                 out_filename);
   g_variant_unref (_ret);
 _out:
   return _ret != NULL;
@@ -1056,7 +1076,8 @@ _out:
 /**
  * remember_daemon__call_rm_sync:
  * @proxy: A #RememberDaemonProxy.
- * @arg_filename: Argument to pass with the method invocation.
+ * @arg_index: Argument to pass with the method invocation.
+ * @out_filename: (out): Return location for return parameter or %NULL to ignore.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
@@ -1069,15 +1090,16 @@ _out:
 gboolean
 remember_daemon__call_rm_sync (
     RememberDaemon *proxy,
-    const gchar *arg_filename,
+    guint arg_index,
+    gchar **out_filename,
     GCancellable *cancellable,
     GError **error)
 {
   GVariant *_ret;
   _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
     "rm",
-    g_variant_new ("(s)",
-                   arg_filename),
+    g_variant_new ("(u)",
+                   arg_index),
     G_DBUS_CALL_FLAGS_NONE,
     -1,
     cancellable,
@@ -1085,7 +1107,8 @@ remember_daemon__call_rm_sync (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "()");
+                 "(s)",
+                 out_filename);
   g_variant_unref (_ret);
 _out:
   return _ret != NULL;
@@ -1176,6 +1199,7 @@ remember_daemon__complete_add (
  * remember_daemon__complete_rm:
  * @object: A #RememberDaemon.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @filename: Parameter to return.
  *
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-remember.rm">rm()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
@@ -1184,10 +1208,12 @@ remember_daemon__complete_add (
 void
 remember_daemon__complete_rm (
     RememberDaemon *object,
-    GDBusMethodInvocation *invocation)
+    GDBusMethodInvocation *invocation,
+    const gchar *filename)
 {
   g_dbus_method_invocation_return_value (invocation,
-    g_variant_new ("()"));
+    g_variant_new ("(s)",
+                   filename));
 }
 
 /* ------------------------------------------------------------------------ */

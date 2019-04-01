@@ -17,7 +17,8 @@
 		<arg type="s" name="filename" direction="in"/>
 	</method>
 	<method name="rm">
-		<arg type="s" name="filename" direction="in"/>
+		<arg type="u" name="index" direction="in"/>
+		<arg type="s" name="filename" direction="out"/>
 	</method>
 	</interface>
 </node>
