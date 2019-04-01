@@ -3,7 +3,7 @@ LIBS_DBUS=-L/usr/local/lib -lgio-2.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -pth
 
 
 all: tfmanctl.o main.cpp
-	g++ $^ -lrememberd $(INCL_DBUS) $(LIBS_DBUS) -o tfmanctl
+	g++ $^ ../gen/librememberd.so $(INCL_DBUS) $(LIBS_DBUS) -o tfmanctl
 
 tfmanctl.o: tfmanctl.cpp tfmanctl.h
 	g++ -c $^ $(INCL_DBUS) $(LIBS_DBUS)

@@ -6,7 +6,6 @@ GIO_LIBS=-L/usr/local/lib  -lgio-2.0 -lgobject-2.0 -lgmodule-2.0   -lglib-2.0 -l
 all:
 	/usr/bin/gdbus-codegen --interface org.remember --c-namespace RememberDaemon --generate-c-code $(APPNAME) $(APPNAME).xml
 	gcc -fPIC -shared $(GIO_CFLAGS) $(GIO_LIBS) $(APPNAME).c -o lib$(APPNAME).so
-	sudo cp lib$(APPNAME).so /usr/lib
 
 clean:
 	rm *.c *.h *.so
