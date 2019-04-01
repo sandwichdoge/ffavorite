@@ -14,7 +14,8 @@ class client
         static int uinit();
 
         /*Our functions*/
-        std::string getFileList();
+        std::string getFormattedFileList();
+        int getFileList();
         int addFile(std::string path);
         int removeFile(std::string path);
 

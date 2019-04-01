@@ -4,6 +4,9 @@
 		<arg type="i" name="ret"/>
 	</signal>
 	<method name="list">
+		<arg type="as" name="files" direction="out"/>
+	</method>
+	<method name="list_fmt">
 		<arg type="s" name="files" direction="out"/>
 	</method>
 	<method name="access">

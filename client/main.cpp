@@ -9,10 +9,10 @@ int main()
 
     p->init();
 
-    files = p->getFileList();
+    files = p->getFormattedFileList();
     std::cout << files;
 
-    p->addFile("/home/z/Test.txt");
+    p->getFileList();
 
     p->uinit();
     return 0;

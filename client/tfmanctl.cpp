@@ -47,18 +47,29 @@ int client::uinit()
 }
 
 
-std::string client::getFileList()
+std::string client::getFormattedFileList()
 {
     GError *err = NULL;
     char *out = NULL;
 
-    remember_daemon__call_list_sync(_gProxy, &out, NULL, &err);
+    remember_daemon__call_list_fmt_sync(_gProxy, &out, NULL, &err);
     if (err) {
         g_print("%s\n", err->message);
         return "";
     }
 
     return std::string(out);
+}
+
+
+int client::getFileList()
+{
+    GError *err = NULL;
+    GVariant *out = NULL;
+
+    remember_daemon__call_list_sync(_gProxy, &out, NULL, &err);
+
+    return 0;
 }
 
 

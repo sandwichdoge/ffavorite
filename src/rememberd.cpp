@@ -40,7 +40,7 @@ int rememberd::init()
     
     g_print("Owned bus name.\n");
 
-    _storage.push_back("None");
+    _storage.push_back("NoneHere");
 
     return 0;
 }
@@ -58,6 +58,7 @@ void rememberd::bus_acquired_cb(GDBusConnection *conn, const gchar *name, gpoint
     _gSkel = remember_daemon__skeleton_new();
 
     g_signal_connect(_gSkel, "handle-list", G_CALLBACK(list_cb), NULL);
+    g_signal_connect(_gSkel, "handle-list-fmt", G_CALLBACK(list_fmt_cb), NULL);
     g_signal_connect(_gSkel, "handle-access", G_CALLBACK(access_cb), NULL);
     g_signal_connect(_gSkel, "handle-add", G_CALLBACK(add_cb), NULL);
     g_signal_connect(_gSkel, "handle-rm", G_CALLBACK(rm_cb), NULL);
@@ -76,7 +77,6 @@ void rememberd::bus_acquired_cb(GDBusConnection *conn, const gchar *name, gpoint
 
 void* rememberd::startGLoop(void *args)
 {
-    g_print("Startin gloop.\n");
 	g_main_loop_run(_gLoop);
 	return NULL;
 }
@@ -89,7 +89,24 @@ void rememberd::name_acquired_cb(GDBusConnection *conn, const gchar *name, gpoin
 
 gboolean rememberd::list_cb(RememberDaemon *object, GDBusMethodInvocation *invocation)
 {
-    g_print("Sending file list.\n");
+    const char** container = new const char*[_storage.size() + 1];
+
+    for (int i = 0; i < _storage.size(); i++) {
+        container[i] = _storage[i].c_str();
+    }
+    container[_storage.size()] = NULL; // All dbus arrays are null terminated.
+
+    remember_daemon__complete_list(object, invocation, container);
+    
+    delete[] container;
+
+    return TRUE;
+}
+
+
+gboolean rememberd::list_fmt_cb(RememberDaemon *object, GDBusMethodInvocation *invocation)
+{
+    g_print("Sending formatted file list.\n");
     
     std::string s = "";
 
@@ -97,7 +114,7 @@ gboolean rememberd::list_cb(RememberDaemon *object, GDBusMethodInvocation *invoc
         s += std::to_string(i) + "." + _storage[i] + "\n";
     }
 
-    remember_daemon__complete_list(object, invocation, s.c_str());
+    remember_daemon__complete_list_fmt(object, invocation, s.c_str());
 
     return TRUE;
 }

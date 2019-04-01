@@ -9,4 +9,4 @@ rememberd.o: rememberd.cpp rememberd.h
 	g++ -c $^ $(INCL_DBUS) $(LIBS_DBUS)
 
 clean:
-	rm *.out *.o *.gch
+	rm *.out *.o *.gch rememberd

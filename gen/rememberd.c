@@ -168,7 +168,7 @@ static const _ExtendedGDBusArgInfo _remember_daemon__method_info_list_OUT_ARG_fi
   {
     -1,
     (gchar *) "files",
-    (gchar *) "s",
+    (gchar *) "as",
     NULL
   },
   FALSE
@@ -190,6 +190,36 @@ static const _ExtendedGDBusMethodInfo _remember_daemon__method_info_list =
     NULL
   },
   "handle-list",
+  FALSE
+};
+
+static const _ExtendedGDBusArgInfo _remember_daemon__method_info_list_fmt_OUT_ARG_files =
+{
+  {
+    -1,
+    (gchar *) "files",
+    (gchar *) "s",
+    NULL
+  },
+  FALSE
+};
+
+static const _ExtendedGDBusArgInfo * const _remember_daemon__method_info_list_fmt_OUT_ARG_pointers[] =
+{
+  &_remember_daemon__method_info_list_fmt_OUT_ARG_files,
+  NULL
+};
+
+static const _ExtendedGDBusMethodInfo _remember_daemon__method_info_list_fmt =
+{
+  {
+    -1,
+    (gchar *) "list_fmt",
+    NULL,
+    (GDBusArgInfo **) &_remember_daemon__method_info_list_fmt_OUT_ARG_pointers,
+    NULL
+  },
+  "handle-list-fmt",
   FALSE
 };
 
@@ -303,6 +333,7 @@ static const _ExtendedGDBusMethodInfo _remember_daemon__method_info_rm =
 static const _ExtendedGDBusMethodInfo * const _remember_daemon__method_info_pointers[] =
 {
   &_remember_daemon__method_info_list,
+  &_remember_daemon__method_info_list_fmt,
   &_remember_daemon__method_info_access,
   &_remember_daemon__method_info_add,
   &_remember_daemon__method_info_rm,
@@ -400,6 +431,7 @@ remember_daemon__override_properties (GObjectClass *klass, guint property_id_beg
  * @handle_access: Handler for the #RememberDaemon::handle-access signal.
  * @handle_add: Handler for the #RememberDaemon::handle-add signal.
  * @handle_list: Handler for the #RememberDaemon::handle-list signal.
+ * @handle_list_fmt: Handler for the #RememberDaemon::handle-list-fmt signal.
  * @handle_rm: Handler for the #RememberDaemon::handle-rm signal.
  * @mysignal: Handler for the #RememberDaemon::mysignal signal.
  *
@@ -428,6 +460,28 @@ remember_daemon__default_init (RememberDaemonIface *iface)
     G_TYPE_FROM_INTERFACE (iface),
     G_SIGNAL_RUN_LAST,
     G_STRUCT_OFFSET (RememberDaemonIface, handle_list),
+    g_signal_accumulator_true_handled,
+    NULL,
+    g_cclosure_marshal_generic,
+    G_TYPE_BOOLEAN,
+    1,
+    G_TYPE_DBUS_METHOD_INVOCATION);
+
+  /**
+   * RememberDaemon::handle-list-fmt:
+   * @object: A #RememberDaemon.
+   * @invocation: A #GDBusMethodInvocation.
+   *
+   * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-remember.list_fmt">list_fmt()</link> D-Bus method.
+   *
+   * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call remember_daemon__complete_list_fmt() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+   *
+   * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+   */
+  g_signal_new ("handle-list-fmt",
+    G_TYPE_FROM_INTERFACE (iface),
+    G_SIGNAL_RUN_LAST,
+    G_STRUCT_OFFSET (RememberDaemonIface, handle_list_fmt),
     g_signal_accumulator_true_handled,
     NULL,
     g_cclosure_marshal_generic,
@@ -585,7 +639,7 @@ remember_daemon__call_list (
 gboolean
 remember_daemon__call_list_finish (
     RememberDaemon *proxy,
-    gchar **out_files,
+    gchar ***out_files,
     GAsyncResult *res,
     GError **error)
 {
@@ -594,7 +648,7 @@ remember_daemon__call_list_finish (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(s)",
+                 "(^as)",
                  out_files);
   g_variant_unref (_ret);
 _out:
@@ -617,13 +671,111 @@ _out:
 gboolean
 remember_daemon__call_list_sync (
     RememberDaemon *proxy,
-    gchar **out_files,
+    gchar ***out_files,
     GCancellable *cancellable,
     GError **error)
 {
   GVariant *_ret;
   _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
     "list",
+    g_variant_new ("()"),
+    G_DBUS_CALL_FLAGS_NONE,
+    -1,
+    cancellable,
+    error);
+  if (_ret == NULL)
+    goto _out;
+  g_variant_get (_ret,
+                 "(^as)",
+                 out_files);
+  g_variant_unref (_ret);
+_out:
+  return _ret != NULL;
+}
+
+/**
+ * remember_daemon__call_list_fmt:
+ * @proxy: A #RememberDaemonProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-remember.list_fmt">list_fmt()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call remember_daemon__call_list_fmt_finish() to get the result of the operation.
+ *
+ * See remember_daemon__call_list_fmt_sync() for the synchronous, blocking version of this method.
+ */
+void
+remember_daemon__call_list_fmt (
+    RememberDaemon *proxy,
+    GCancellable *cancellable,
+    GAsyncReadyCallback callback,
+    gpointer user_data)
+{
+  g_dbus_proxy_call (G_DBUS_PROXY (proxy),
+    "list_fmt",
+    g_variant_new ("()"),
+    G_DBUS_CALL_FLAGS_NONE,
+    -1,
+    cancellable,
+    callback,
+    user_data);
+}
+
+/**
+ * remember_daemon__call_list_fmt_finish:
+ * @proxy: A #RememberDaemonProxy.
+ * @out_files: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to remember_daemon__call_list_fmt().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with remember_daemon__call_list_fmt().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+gboolean
+remember_daemon__call_list_fmt_finish (
+    RememberDaemon *proxy,
+    gchar **out_files,
+    GAsyncResult *res,
+    GError **error)
+{
+  GVariant *_ret;
+  _ret = g_dbus_proxy_call_finish (G_DBUS_PROXY (proxy), res, error);
+  if (_ret == NULL)
+    goto _out;
+  g_variant_get (_ret,
+                 "(s)",
+                 out_files);
+  g_variant_unref (_ret);
+_out:
+  return _ret != NULL;
+}
+
+/**
+ * remember_daemon__call_list_fmt_sync:
+ * @proxy: A #RememberDaemonProxy.
+ * @out_files: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-remember.list_fmt">list_fmt()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See remember_daemon__call_list_fmt() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+gboolean
+remember_daemon__call_list_fmt_sync (
+    RememberDaemon *proxy,
+    gchar **out_files,
+    GCancellable *cancellable,
+    GError **error)
+{
+  GVariant *_ret;
+  _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
+    "list_fmt",
     g_variant_new ("()"),
     G_DBUS_CALL_FLAGS_NONE,
     -1,
@@ -951,6 +1103,27 @@ _out:
  */
 void
 remember_daemon__complete_list (
+    RememberDaemon *object,
+    GDBusMethodInvocation *invocation,
+    const gchar *const *files)
+{
+  g_dbus_method_invocation_return_value (invocation,
+    g_variant_new ("(^as)",
+                   files));
+}
+
+/**
+ * remember_daemon__complete_list_fmt:
+ * @object: A #RememberDaemon.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @files: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-remember.list_fmt">list_fmt()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+void
+remember_daemon__complete_list_fmt (
     RememberDaemon *object,
     GDBusMethodInvocation *invocation,
     const gchar *files)

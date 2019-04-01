@@ -43,6 +43,10 @@ struct _RememberDaemonIface
     RememberDaemon *object,
     GDBusMethodInvocation *invocation);
 
+  gboolean (*handle_list_fmt) (
+    RememberDaemon *object,
+    GDBusMethodInvocation *invocation);
+
   gboolean (*handle_rm) (
     RememberDaemon *object,
     GDBusMethodInvocation *invocation,
@@ -62,6 +66,11 @@ guint remember_daemon__override_properties (GObjectClass *klass, guint property_
 
 /* D-Bus method call completion functions: */
 void remember_daemon__complete_list (
+    RememberDaemon *object,
+    GDBusMethodInvocation *invocation,
+    const gchar *const *files);
+
+void remember_daemon__complete_list_fmt (
     RememberDaemon *object,
     GDBusMethodInvocation *invocation,
     const gchar *files);
@@ -97,11 +106,29 @@ void remember_daemon__call_list (
 
 gboolean remember_daemon__call_list_finish (
     RememberDaemon *proxy,
-    gchar **out_files,
+    gchar ***out_files,
     GAsyncResult *res,
     GError **error);
 
 gboolean remember_daemon__call_list_sync (
+    RememberDaemon *proxy,
+    gchar ***out_files,
+    GCancellable *cancellable,
+    GError **error);
+
+void remember_daemon__call_list_fmt (
+    RememberDaemon *proxy,
+    GCancellable *cancellable,
+    GAsyncReadyCallback callback,
+    gpointer user_data);
+
+gboolean remember_daemon__call_list_fmt_finish (
+    RememberDaemon *proxy,
+    gchar **out_files,
+    GAsyncResult *res,
+    GError **error);
+
+gboolean remember_daemon__call_list_fmt_sync (
     RememberDaemon *proxy,
     gchar **out_files,
     GCancellable *cancellable,
