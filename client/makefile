@@ -2,10 +2,10 @@ INCL_DBUS=-I/usr/include/gio-unix-2.0/ -I/usr/include/glib-2.0 -I/usr/lib/x86_64
 LIBS_DBUS=-L/usr/local/lib -lgio-2.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -pthread -L./gen -lmyex
 
 
-all: tfmanctl.o main.cpp
-	g++ $^ ../gen/dbusrememberd.o $(INCL_DBUS) $(LIBS_DBUS) -o tfmanctl
+all: rem.o main.cpp
+	g++ $^ ../gen/dbusrememberd.o $(INCL_DBUS) $(LIBS_DBUS) -o rem
 
-tfmanctl.o: tfmanctl.cpp tfmanctl.h
+rem.o: rem.cpp rem.h
 	g++ -c $^ $(INCL_DBUS) $(LIBS_DBUS)
 
 clean:
