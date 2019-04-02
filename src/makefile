@@ -3,7 +3,7 @@ LIBS_DBUS=-L/usr/local/lib -lgio-2.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -pth
 
 
 all: main.cpp rememberd.o
-	g++ $^ $(INCL_DBUS) $(LIBS_DBUS) ../gen/librememberd.so -o rememberd
+	g++ $^ $(INCL_DBUS) $(LIBS_DBUS) ../gen/dbusrememberd.o -o rememberd
 
 rememberd.o: rememberd.cpp rememberd.h
 	g++ -c $^ $(INCL_DBUS) $(LIBS_DBUS)
