@@ -48,18 +48,34 @@ int client::uinit()
 }
 
 
-std::string client::getFormattedFileList()
+std::string client::getFileListSimple()
 {
-    GError *err = NULL;
-    char *out = NULL;
+    std::string ret = "";
+    std::vector<std::string> v;
+    
+    if (getFileList(v) != 0) return "";
 
-    remember_daemon__call_list_fmt_sync(_gProxy, &out, NULL, &err);
-    if (err) {
-        g_print("%s\n", err->message);
-        return "";
+    for (int i = 0; i < v.size(); i++) {
+        ret += v[i] + "\n";
     }
 
-    return std::string(out);
+    return ret;
+}
+
+
+std::string client::getFileListVerbose()
+{
+    std::string ret = "";
+    std::vector<std::string> v;
+    
+    if (getFileList(v) != 0) return "";
+
+    for (int i = 0; i < v.size(); i++) {
+        ret += std::to_string(i) + " " + v[i] + "\n";
+    }
+
+    return ret;
+
 }
 
 

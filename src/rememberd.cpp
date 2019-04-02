@@ -122,7 +122,7 @@ gboolean rememberd::list_fmt_cb(RememberDaemon *object, GDBusMethodInvocation *i
 
 gboolean rememberd::access_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, guint arg_index)
 {
-    g_print("Sending item %d.\n", arg_index);
+    //g_print("Sending item %d.\n", arg_index);
 
     std::string result = "";
 

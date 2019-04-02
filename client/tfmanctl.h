@@ -15,7 +15,8 @@ class client
         static int uinit();
 
         /*Our functions*/
-        std::string getFormattedFileList();
+        std::string getFileListSimple();
+        std::string getFileListVerbose();
         int getFileList(std::vector<std::string> &v);
         std::string accessIndex(unsigned int i);
         int addFile(std::string path);

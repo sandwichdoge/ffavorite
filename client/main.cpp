@@ -3,6 +3,7 @@
 #include <getopt.h>
 #include <unistd.h>
 
+int G_FLAG_VERBOSE = 0;
 
 int expandFilePath(std::string &path)
 {
@@ -74,6 +75,21 @@ int expandFilePath(std::string &path)
 }
 
 
+void showHelp()
+{
+    std::cout << "\n\
+    Commandline file manager.\n\
+    Author: sandwichdoge\n\
+    Parameters:\n\n\
+    -a <filepath>\t: Add a file to storage.\n\
+    -r <index>\t\t: Remove file at index in storage.\n\
+    -l\t\t\t: List files in storage.\n\
+    -i <index>\t\t: Print out name of file at index.\n\
+    -v\t\t\t: Verbose.\n\
+    -h\t\t\t: Show this help.\n";
+}
+
+
 int main(int argc, char *argv[])
 {
     client *p = new client;
@@ -83,10 +99,15 @@ int main(int argc, char *argv[])
     unsigned int i = 0; // -l access index
 
     int opt;
-    while((opt = getopt(argc, argv, "i:la:r:")) != -1)  
+    while((opt = getopt(argc, argv, "i:lhva:r:")) != -1)  
     {  
         switch(opt)  
         {
+            case 'h':
+            {
+                showHelp();
+            }
+                break;
             case 'i':
             {
                 /*Access Index*/
@@ -98,7 +119,15 @@ int main(int argc, char *argv[])
                 break;
             case 'l':
             {
-                std::string files = p->getFormattedFileList();
+                std::string files = "";
+                if (G_FLAG_VERBOSE == 0) {
+                    files = p->getFileListSimple();
+                }
+                else
+                {
+                    files = p->getFileListVerbose();
+                }
+                
                 std::cout << files;
             }
                 break;
@@ -134,6 +163,10 @@ int main(int argc, char *argv[])
                 std::cout << "Removed " << removedFile << (status == 0 ? " successfully.\n" : "unsuccessfully.\n") << ".\n";
             }
                 break;
+            case 'v': // Verbose
+            {
+                G_FLAG_VERBOSE = 1; 
+            }
         }  
     }  
 
