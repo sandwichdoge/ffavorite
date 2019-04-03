@@ -10,3 +10,6 @@ rem.o: rem.cpp rem.h
 
 clean:
 	rm *.out *.o *.gch
+
+install:
+	ln -s $(shell pwd)/rem /usr/bin/rem

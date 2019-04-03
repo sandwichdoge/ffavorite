@@ -1,0 +1,17 @@
+[Unit]
+Description=Remember Daemon
+After=dbus.service
+
+[Service]
+Type=simple
+#BusName=remember.service
+#ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/sbin/rememberd
+Restart=on-failure
+KillMode=process
+
+#ProtectSystem=true
+#ProtectHome=read-only
+
+[Install]
+WantedBy=default.target
