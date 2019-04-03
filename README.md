@@ -25,6 +25,7 @@ libglib2.0-dev
 # Build
 ```
 $git clone git@github.com:sandwichdoge/tfman.git
+$cd tfman
 $make
 ```
 
@@ -36,5 +37,6 @@ $./rememberd &
 
 # Run client
 ```
-Coming soon
+$cd tfman/client
+$./rem -h
 ```

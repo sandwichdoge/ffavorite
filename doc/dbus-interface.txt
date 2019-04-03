@@ -1,0 +1,15 @@
+rememberd supports IPC via D-Bus interface.
+
+[Methods]
+
+- Array{String} list()
+Return the list of files currently in storage.
+
+- String access(Unsigned Integer index)
+Return the item at index number.
+
+- Void add(String data)
+Add data string to storage.
+
+- String rm(Unsigned Integer index)
+Remove item at index number, return name of the deleted item.

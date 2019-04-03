@@ -77,10 +77,10 @@ int expandFilePath(std::string &path)
 
 void showHelp()
 {
-    std::cout << "\n\
-    Commandline file manager.\n\
-    Author: sandwichdoge\n\
-    Parameters:\n\n\
+    std::cout << "\
+[Commandline file manager]\n\
+Author\t\t: sandwichdoge\n\
+Parameters\t:\n\
     -a <filepath>\t: Add a file to storage.\n\
     -r <index>\t\t: Remove file at index in storage.\n\
     -l\t\t\t: List files in storage.\n\
@@ -99,15 +99,25 @@ int main(int argc, char *argv[])
     unsigned int i = 0; // -l access index
 
     int opt;
-    while((opt = getopt(argc, argv, "i:lhva:r:")) != -1)  
-    {  
+
+    // Check verbose flag first.
+    while((opt = getopt(argc, argv, "i:lvha:r:")) != -1)  
+    {
+        if (opt == 'v') {
+            G_FLAG_VERBOSE = 1;
+        }
+    }
+    optind = 1;
+
+    while((opt = getopt(argc, argv, "i:lvha:r:")) != -1)  
+    {
         switch(opt)  
         {
             case 'h':
             {
                 showHelp();
-            }
                 break;
+            }
             case 'i':
             {
                 /*Access Index*/
@@ -115,8 +125,8 @@ int main(int argc, char *argv[])
                 std::string filename = p->accessIndex(i);
                 if (filename == "") std::cout << "ERROR\n";
                 else std::cout << filename << "\n";
-            }
                 break;
+            }
             case 'l':
             {
                 std::string files = "";
@@ -129,8 +139,8 @@ int main(int argc, char *argv[])
                 }
                 
                 std::cout << files;
-            }
                 break;
+            }
             case 'a':
             {
                 std::string target = "";
@@ -152,8 +162,8 @@ int main(int argc, char *argv[])
 
                 }
                 optind = index - 1;
-            }
                 break;
+            }
             case 'r':
             {
                 sscanf(optarg, "%d", &i);
@@ -161,12 +171,10 @@ int main(int argc, char *argv[])
                 std::string removedFile = "";
                 status = p->removeFile(i, removedFile);
                 std::cout << "Removed " << removedFile << (status == 0 ? " successfully.\n" : "unsuccessfully.\n") << ".\n";
-            }
                 break;
-            case 'v': // Verbose
-            {
-                G_FLAG_VERBOSE = 1; 
             }
+            case 'v':
+                break;
         }  
     }  
 
