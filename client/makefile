@@ -15,4 +15,4 @@ clean:
 	rm *.out *.o *.gch
 
 install:
-	ln -s $(shell pwd)/rem /usr/bin/rem
+	ln -sf $(shell pwd)/rem /usr/bin/rem
