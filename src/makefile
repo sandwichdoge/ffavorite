@@ -16,4 +16,4 @@ install:
 	cp -vf remember.service /lib/systemd/system
 	ln -sf /lib/systemd/system/remember.service /usr/lib/systemd/user/remember.service
 	ln -sf /lib/systemd/system/remember.service /etc/systemd/user/default.target.wants/remember.service
-	#systemctl --user enable remember.service
+	systemctl --user enable remember.service

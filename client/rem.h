@@ -1,3 +1,5 @@
+#ifndef REM_CLIENT_H_
+#define REM_CLIENT_H_
 #include "../gen/rememberd.h"
 #include <string>
 #include <vector>
@@ -31,3 +33,4 @@ class client
         static void *startGLoop(void *);
 
 };
+#endif
