@@ -1,12 +1,12 @@
-#What
+# What
 
-Terminal File Manager daemon.
+Favorite File Manager daemon.
 
-#Dependencies
+# Dependencies
 
 libglib2.0-dev
 
-#How to build
+# How to build
 ```
 cd gen
 make
