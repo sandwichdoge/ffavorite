@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "controller.h"
+#include "../CommonCPP/StringUtils/StringUtils.h"
 
 
 Controller::Controller() 
@@ -35,6 +36,8 @@ int Controller::processInput(client *p, const std::string input)
     std::string arg = "";
     int i = 0   ;
     int status = 0;
+    std::string line = "";
+
 
     if (input == "help" || input == "-h" || input == "?") {
         showHelp();
@@ -82,6 +85,39 @@ int Controller::processInput(client *p, const std::string input)
     else if (input == "verbose" || input == "v" || input == "-v") {
         _isVerbose ^= 1;
         std::cout << "Verbose is " << _isVerbose << "\n";
+    }
+    else if (input == "command" || input == "c" || input == "-c") {
+        std::getline(std::cin, line);
+
+        if (line[0] == ' ') StringUtils::stringTrimLeft(line, 1);
+
+        // Replace $0 in line with storage[0]?
+        size_t tmp = 0;
+        std::string filename;
+        bool err = false;
+        unsigned int total = p->getItemCount();
+
+        for (int i = 0; i < total; i++) {
+            std::string next = "$" + std::to_string(i);
+            tmp = line.find(next);
+            if (tmp == std::string::npos) {
+                continue;
+            }
+
+            filename = p->accessIndex(i);
+            if (filename.empty()) {
+                std::cout << "empty\n";
+                err = true;
+                break;
+            }
+
+            StringUtils::stringReplace(line, next, filename);
+        }
+
+        std::cout << line << "\n";
+        // Execute commandline
+        system(line.c_str());
+
     }
     else if (std::cin.eof()) {
         return -1;

@@ -27,9 +27,10 @@ class rememberd
         static GMainLoop *_gLoop;
         static RememberDaemon *_gSkel;
 
-        /*Actual data*/
+        /*Callback handlers*/
         static gboolean list_cb(RememberDaemon *object, GDBusMethodInvocation *invocation);
         static gboolean list_fmt_cb(RememberDaemon *object, GDBusMethodInvocation *invocation);
+        static gboolean total_cb(RememberDaemon *object, GDBusMethodInvocation *invocation);
         static gboolean access_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, guint arg_index);
         static gboolean add_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_filename);
         static gboolean rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, unsigned index);

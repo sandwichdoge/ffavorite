@@ -20,6 +20,7 @@ class client
         std::string getFileListSimple();
         std::string getFileListVerbose();
         int getFileList(std::vector<std::string> &v);
+        unsigned int getItemCount();
         std::string accessIndex(unsigned int i);
         int addFile(std::string path);
         int removeFile(unsigned int index, std::string &out);

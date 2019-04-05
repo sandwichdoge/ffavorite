@@ -12,6 +12,8 @@ void sighandler(int signo)
             p->uinit();
             delete p;
     }
+
+    exit(0);
 }
 
 

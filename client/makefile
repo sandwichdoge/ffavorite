@@ -3,7 +3,7 @@ LIBS_DBUS=-L/usr/local/lib -lgio-2.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -pth
 
 
 all: rem.o controller.o main.cpp
-	g++ $^ ../gen/dbusrememberd.o $(INCL_DBUS) $(LIBS_DBUS) -o rem
+	g++ $^ ../gen/dbusrememberd.o $(INCL_DBUS) $(LIBS_DBUS) -L../CommonCPP/StringUtils/ -lstrutils -o rem
 
 rem.o: rem.cpp rem.h
 	g++ -c $^ $(INCL_DBUS) $(LIBS_DBUS)

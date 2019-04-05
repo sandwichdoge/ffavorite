@@ -101,6 +101,7 @@ std::string client::accessIndex(unsigned int i)
 {
     GError *err = NULL;
     char *filename = NULL;
+
     remember_daemon__call_access_sync(_gProxy, i, &filename, NULL, &err);
     if (err || filename == NULL) {
         g_print("%s\n", err->message);
@@ -109,6 +110,21 @@ std::string client::accessIndex(unsigned int i)
     }
 
     return std::string(filename);
+}
+
+
+unsigned int client::getItemCount()
+{
+    GError *err = NULL;
+    unsigned int count = 0;
+
+    remember_daemon__call_total_sync(_gProxy, &count, NULL, &err);
+    if (err) {
+        g_print("%s\n", err->message);
+        g_error_free(err);
+    }
+
+    return count;
 }
 
 

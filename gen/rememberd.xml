@@ -9,6 +9,9 @@
 	<method name="list_fmt">
 		<arg type="s" name="files" direction="out"/>
 	</method>
+	<method name="total">
+		<arg type="u" name="count" direction="out"/>
+	</method>
 	<method name="access">
 		<arg type="u" name="index" direction="in"/>
 		<arg type="s" name="filename" direction="out"/>

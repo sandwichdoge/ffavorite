@@ -3,7 +3,10 @@ rememberd supports IPC via D-Bus interface.
 [Methods]
 
 - Array{String} list()
-Return the list of files currently in storage.
+Return the list of item in storage.
+
+- Unsigned Integer total()
+Return the number of items in storage.
 
 - String access(Unsigned Integer index)
 Return the item at index number.

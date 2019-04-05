@@ -59,6 +59,7 @@ void rememberd::bus_acquired_cb(GDBusConnection *conn, const gchar *name, gpoint
 
     g_signal_connect(_gSkel, "handle-list", G_CALLBACK(list_cb), NULL);
     g_signal_connect(_gSkel, "handle-list-fmt", G_CALLBACK(list_fmt_cb), NULL);
+    g_signal_connect(_gSkel, "handle-total", G_CALLBACK(total_cb), NULL);
     g_signal_connect(_gSkel, "handle-access", G_CALLBACK(access_cb), NULL);
     g_signal_connect(_gSkel, "handle-add", G_CALLBACK(add_cb), NULL);
     g_signal_connect(_gSkel, "handle-rm", G_CALLBACK(rm_cb), NULL);
@@ -115,6 +116,16 @@ gboolean rememberd::list_fmt_cb(RememberDaemon *object, GDBusMethodInvocation *i
     }
 
     remember_daemon__complete_list_fmt(object, invocation, s.c_str());
+
+    return TRUE;
+}
+
+
+gboolean rememberd::total_cb(RememberDaemon *object, GDBusMethodInvocation *invocation)
+{
+    unsigned int count = _storage.size();
+
+    remember_daemon__complete_total(object, invocation, count);
 
     return TRUE;
 }

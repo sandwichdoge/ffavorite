@@ -3,5 +3,7 @@
 *.so
 *.out
 .vscode
+remember.c
+remember.h
 rememberd
 rem
