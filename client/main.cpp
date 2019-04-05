@@ -14,6 +14,14 @@ int main(int argc, char *argv[])
         G_INTERACTIVE_MODE = true;
     }
 
+
+    char **raw = (char**)malloc(sizeof(char*) * argc);
+
+    for (int i = 0; i < argc; i++) {
+        raw[i] = (char*)malloc(sizeof(argv[i]));
+        strcpy(raw[i], argv[i]);
+    }
+    
     int opt;
 
     Controller *pController = new Controller();
@@ -27,7 +35,7 @@ int main(int argc, char *argv[])
     else // Non-interactive
     {
         // Check verbose flag first.
-        while((opt = getopt(argc, argv, "i:lvha:r:")) != -1)  
+        while((opt = getopt(argc, argv, "ci:lvha:r:")) != -1)  
         {
             if (opt == 'v') {
                 G_FLAG_VERBOSE = true;
@@ -36,11 +44,16 @@ int main(int argc, char *argv[])
 
         optind = 1;
 
-        while((opt = getopt(argc, argv, "i:lvha:r:")) != -1) {
-            pController->processCmd(opt, argc, argv);
+        while((opt = getopt(argc, argv, "ci:lvha:r:")) != -1) {
+            if (pController->processCmd(opt, argc, raw) < 0) break;
         }
     }
 
+    for (int i = 0; i < argc; i++) {
+        free(raw[i]);
+    }
+    free(raw);
+    
     delete pController;    
 
     return 0;

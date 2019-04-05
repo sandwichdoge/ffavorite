@@ -124,7 +124,7 @@ gboolean rememberd::list_fmt_cb(RememberDaemon *object, GDBusMethodInvocation *i
 gboolean rememberd::total_cb(RememberDaemon *object, GDBusMethodInvocation *invocation)
 {
     unsigned int count = _storage.size();
-
+    g_print("coutn [%d]\n", count);
     remember_daemon__complete_total(object, invocation, count);
 
     return TRUE;

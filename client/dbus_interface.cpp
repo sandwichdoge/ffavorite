@@ -115,7 +115,6 @@ unsigned int client::getItemCount()
 {
     GError *err = NULL;
     unsigned int count = 0;
-
     remember_daemon__call_total_sync(_gProxy, &count, NULL, &err);
     if (err) {
         g_print("%s\n", err->message);

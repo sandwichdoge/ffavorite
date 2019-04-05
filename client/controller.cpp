@@ -17,8 +17,7 @@ int Controller::poll()
     std::string input = "";
     std::cin >> input;
     
-
-    client *p = new client;
+    p = new client;
     p->init();
 
     /* Process input here.*/
@@ -26,6 +25,7 @@ int Controller::poll()
 
     p->uinit();
     delete p;
+    p = NULL;
 
     return ret;
 }
@@ -88,40 +88,47 @@ int Controller::processInput(client *p, const std::string input)
     }
     else if (input == "command" || input == "c" || input == "-c") {
         std::getline(std::cin, line);
-
-        if (line[0] == ' ') StringUtils::stringTrimLeft(line, 1);
-
-        // Replace $0 in line with storage[0]?
-        size_t tmp = 0;
-        std::string filename;
-        bool err = false;
-        unsigned int total = p->getItemCount();
-
-        for (int i = 0; i < total; i++) {
-            std::string next = "$" + std::to_string(i);
-            tmp = line.find(next);
-            if (tmp == std::string::npos) {
-                continue;
-            }
-
-            filename = p->accessIndex(i);
-            if (filename.empty()) {
-                std::cout << "empty\n";
-                err = true;
-                break;
-            }
-
-            StringUtils::stringReplace(line, next, filename);
-        }
-
-        std::cout << line << "\n";
-        // Execute commandline
-        system(line.c_str());
+        execCmd(line);
 
     }
     else if (std::cin.eof()) {
         return -1;
     }
+
+    return 0;
+}
+
+
+int Controller::execCmd(std::string line)
+{
+    if (line[0] == ' ') StringUtils::stringTrimLeft(line, 1);
+
+    size_t tmp = 0;
+    std::string filename;
+    bool err = false;
+    unsigned int total = p->getItemCount();
+    
+    // Replace $0 in line with storage[0]
+    for (int i = 0; i < total; i++) {
+        std::string next = "$" + std::to_string(i);
+        tmp = line.find(next);
+        if (tmp == std::string::npos) {
+            continue;
+        }
+
+        filename = p->accessIndex(i);
+        if (filename.empty()) {
+            std::cout << "empty\n";
+            err = true;
+            break;
+        }
+
+        StringUtils::stringReplace(line, next, filename);
+    }
+
+    std::cout << line << "\n";
+    // Execute commandline
+    system(line.c_str());
 
     return 0;
 }
@@ -157,16 +164,30 @@ bool Controller::isNumber(const std::string s)
 }
 
 
-int Controller::processCmd(char opt, int argc, char *argv[])
+int Controller::processCmd(char opt, int argc, char **argv)
 {
-    client *p = new client;
+    p = new client;
     p->init();
 
     int status = 0; // operation status
     unsigned int i = 0; // -l access index
 
+
     switch(opt)  
     {
+        case 'c':
+        {
+            std::string line = "";
+
+            int index = optind; // optarg, 1 in this case
+            while (index < argc) {
+                line += " " + std::string(argv[index]);
+                index++;
+            }
+            execCmd(line);
+
+            return -1; // -c treats all following arguments as its eval params
+        }
         case 'h':
         {
             showHelp();
