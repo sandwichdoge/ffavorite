@@ -26,19 +26,20 @@ libglib2.0-dev
 
 # Build
 ```
-$git clone git@github.com:sandwichdoge/tfman.git
-$cd tfman
+$git clone git@github.com:sandwichdoge/ffavorite.git
+$cd ffavorite
 $make
+$sudo make install
 ```
 
 # Run daemon
 ```
-$cd tfman/src
+$cd ffavorite/src
 $./rememberd &
 ```
 
 # Run client
 ```
-$cd tfman/client
+$cd ffavorite/client
 $./rem -h
 ```

@@ -341,6 +341,7 @@ Parameters\t:\n\
     -r <index>\t\t: Remove file at index in storage.\n\
     -l\t\t\t: List files in storage.\n\
     -i <index>\t\t: Print out name of file at index.\n\
+    -c <cmd>\t\t: Command to execute, $0 will be replaced with file #0 in storage.\n\
     -v\t\t\t: Verbose.\n\
     -h\t\t\t: Show this help.\n";
 }
