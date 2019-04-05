@@ -1,5 +1,4 @@
-#include "rem.h"
-#include <iostream>
+#include "dbus_interface.h"
 
 
 GMainLoop *client::_gLoop = NULL;

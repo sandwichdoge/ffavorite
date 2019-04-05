@@ -2,10 +2,10 @@ INCL_DBUS=-I/usr/include/gio-unix-2.0/ -I/usr/include/glib-2.0 -I/usr/lib/x86_64
 LIBS_DBUS=-L/usr/local/lib -lgio-2.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -pthread -L./gen -lmyex
 
 
-all: rem.o controller.o main.cpp
+all: dbus_interface.o controller.o main.cpp
 	g++ $^ ../gen/dbusrememberd.o $(INCL_DBUS) $(LIBS_DBUS) -L../CommonCPP/StringUtils/ -lstrutils -o rem
 
-rem.o: rem.cpp rem.h
+dbus_interface.o: dbus_interface.cpp dbus_interface.h
 	g++ -c $^ $(INCL_DBUS) $(LIBS_DBUS)
 
 controller.o: controller.cpp controller.h

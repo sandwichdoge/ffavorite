@@ -1,4 +1,3 @@
-#include "rem.h"
 #include "controller.h"
 #include <iostream>
 #include <getopt.h>

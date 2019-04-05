@@ -1,5 +1,5 @@
 #include <string>
-#include "rem.h"
+#include "dbus_interface.h"
 
 
 class Controller
