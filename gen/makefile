@@ -8,4 +8,4 @@ all:
 	gcc -c -fPIC $(GIO_CFLAGS) $(GIO_LIBS) $(APPNAME).c -o dbus$(APPNAME).o
 
 clean:
-	rm *.c *.h *.so
+	rm *.c *.h *.so *.o

@@ -20,7 +20,6 @@ int client::init()
 
 	_gLoop = g_main_loop_new(NULL, FALSE);
 
-    
 
 	_gProxy = remember_daemon__proxy_new_sync(_gConn,
 							G_DBUS_PROXY_FLAGS_NONE,

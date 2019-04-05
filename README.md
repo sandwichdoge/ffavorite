@@ -1,4 +1,6 @@
-# tfman
+# ffavorite
+Save files to favorite list from the shell.
+
 
 # The backend
 
