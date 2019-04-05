@@ -24,6 +24,7 @@ int Controller::poll()
     int ret = processInput(p, input);
 
     p->uinit();
+    delete p;
 
     return ret;
 }
@@ -196,6 +197,7 @@ int Controller::processCmd(char opt, int argc, char *argv[])
 
 
     p->uinit();
+    delete p;
 
     return 0;
 }

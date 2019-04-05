@@ -4,9 +4,9 @@
 #include <getopt.h>
 #include <unistd.h>
 
+
 bool G_FLAG_VERBOSE = false;
 bool G_INTERACTIVE_MODE = false;
-
 
 
 int main(int argc, char *argv[])
@@ -34,13 +34,15 @@ int main(int argc, char *argv[])
                 G_FLAG_VERBOSE = true;
             }
         }
+
         optind = 1;
 
         while((opt = getopt(argc, argv, "i:lvha:r:")) != -1) {
             pController->processCmd(opt, argc, argv);
         }
     }
-    
+
+    delete pController;    
 
     return 0;
 }
