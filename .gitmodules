@@ -1,0 +1,3 @@
+[submodule "CommonCPP"]
+	path = CommonCPP
+	url = git@github.com:sandwichdoge/CommonCPP.git
