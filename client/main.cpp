@@ -2,6 +2,7 @@
 #include <iostream>
 #include <getopt.h>
 #include <unistd.h>
+#include <string.h>
 
 
 bool G_FLAG_VERBOSE = false;
