@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     char **raw = (char**)malloc(sizeof(char*) * argc);
 
     for (int i = 0; i < argc; i++) {
-        raw[i] = (char*)malloc(sizeof(argv[i]));
+        raw[i] = (char*)malloc(strlen(argv[i]));
         strcpy(raw[i], argv[i]);
     }
     
