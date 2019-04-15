@@ -23,5 +23,13 @@
 		<arg type="u" name="index" direction="in"/>
 		<arg type="s" name="filename" direction="out"/>
 	</method>
+	<method name="export">
+		<arg type="s" name="dest" direction="in"/>
+		<arg type="i" name="ret" direction="out"/>
+	</method>
+	<method name="import">
+		<arg type="s" name="src" direction="in"/>
+		<arg type="i" name="ret" direction="out"/>
+	</method>
 	</interface>
 </node>

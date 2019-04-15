@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include "controller.h"
 #include "../CommonCPP/StringUtils/StringUtils.h"
 
@@ -127,6 +128,10 @@ int Controller::execCmd(std::string line)
     }
 
     std::cout << line << "\n";
+
+    if (line.substr(0, 3) == "cd ") {
+        std::cout << "cd is a built-in shell cmd. Aborted.\n";
+    }
     // Execute commandline
     system(line.c_str());
 

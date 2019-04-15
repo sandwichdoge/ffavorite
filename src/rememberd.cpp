@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unistd.h>
+#include <fstream>
 #include <pthread.h>
 #include "rememberd.h"
 #include <errno.h>
@@ -63,6 +64,8 @@ void rememberd::bus_acquired_cb(GDBusConnection *conn, const gchar *name, gpoint
     g_signal_connect(_gSkel, "handle-access", G_CALLBACK(access_cb), NULL);
     g_signal_connect(_gSkel, "handle-add", G_CALLBACK(add_cb), NULL);
     g_signal_connect(_gSkel, "handle-rm", G_CALLBACK(rm_cb), NULL);
+    g_signal_connect(_gSkel, "handle-export", G_CALLBACK(export_cb), NULL);
+    g_signal_connect(_gSkel, "handle-import", G_CALLBACK(import_cb), NULL);
 
     g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(_gSkel), conn, TFMAN_DBUS_PATH, &err);
 
@@ -178,3 +181,42 @@ gboolean rememberd::rm_cb(RememberDaemon *object, GDBusMethodInvocation *invocat
     return TRUE;
 }
 
+
+gboolean rememberd::export_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_dest)
+{
+    std::ofstream dest(arg_dest);
+    if (!dest.is_open()) {
+        remember_daemon__complete_export(object, invocation, -EIO);
+    }
+
+    for (int i = 0; i <_storage.size(); i++) {
+        dest << _storage[i] << "\n";
+    }
+    
+    dest.close();
+    
+    remember_daemon__complete_export(object, invocation, 0);
+
+    return TRUE;
+}
+
+
+gboolean rememberd::import_cb(RememberDaemon *object, GDBusMethodInvocation *invocation, const gchar *arg_src)
+{
+    std::ifstream src(arg_src);
+    if (!src.is_open()) {
+        remember_daemon__complete_import(object, invocation, -EIO);
+    }
+
+    _storage.clear();
+    std::string line = "";
+    while (getline(src, line)) {
+        if (!line.empty()) _storage.push_back(line);
+    }
+    
+    src.close();
+    
+    remember_daemon__complete_import(object, invocation, 0);
+
+    return TRUE;
+}
