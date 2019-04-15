@@ -158,3 +158,35 @@ int client::removeFile(unsigned int index, std::string &out)
 
     return 0;
 }
+
+
+int client::importList(std::string src)
+{
+    GError *err = NULL;
+    int ret = 0;
+
+    remember_daemon__call_import_sync(_gProxy, src.c_str(), &ret, NULL, &err);
+    if (err) {
+        g_print("%s\n", err->message);
+        g_error_free(err);
+        return -1;
+    }
+
+    return ret;
+}
+
+
+int client::exportList(std::string dest)
+{
+    GError *err = NULL;
+    int ret = 0;
+
+    remember_daemon__call_export_sync(_gProxy, dest.c_str(), &ret, NULL, &err);
+    if (err) {
+        g_print("%s\n", err->message);
+        g_error_free(err);
+        return -1;
+    }
+
+    return ret;
+}

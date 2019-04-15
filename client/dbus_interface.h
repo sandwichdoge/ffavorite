@@ -24,6 +24,8 @@ class client
         std::string accessIndex(unsigned int i);
         int addFile(std::string path);
         int removeFile(unsigned int index, std::string &out);
+        int importList(std::string src);
+        int exportList(std::string dest);
 
     private:
         /*Ritual D-Bus stuff*/

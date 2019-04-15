@@ -8,8 +8,26 @@
 Controller::Controller() 
 {
     _isVerbose = false;
+
+    // Import saved data from previous session.
+    p = new client;
+    p->init();
+    p->importList("saved_data.txt");
+    p->uinit();
+    delete p;
+    p = NULL;
 }
-Controller::~Controller() {}
+
+Controller::~Controller()
+{
+    // Export saved data to disk.
+    p = new client;
+    p->init();
+    p->exportList("saved_data.txt");
+    p->uinit();
+    delete p;
+    p = NULL;
+}
 
 
 int Controller::poll()
@@ -17,7 +35,7 @@ int Controller::poll()
     /*Get user input from stdin*/
     std::string input = "";
     std::cin >> input;
-    
+
     p = new client;
     p->init();
 
