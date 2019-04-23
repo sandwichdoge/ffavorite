@@ -29,11 +29,14 @@ int client::init()
 		g_print("Error %s\n", err->message);
 		g_error_free(err);
 		uinit();
+        
+        return -1;
 	}
 
 	// Register callback function to handle mysignal received from server
 	//g_signal_connect(_proxy, "mysignal", G_CALLBACK(handle_mysignal), NULL);
 
+    return 0;
 }
 
 int client::uinit()
