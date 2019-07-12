@@ -22,12 +22,14 @@ with the stored files (e.g. copy/move the stored files to the new directory).
 
 # Dependencies
 
-libglib2.0-dev
+libglib2.0-dev, git
 
 # Build
 ```
 $git clone git@github.com:sandwichdoge/ffavorite.git
 $cd ffavorite
+$git submodule update --init
+$./configure
 $make
 $sudo make install
 ```
