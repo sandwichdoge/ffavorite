@@ -10,23 +10,10 @@ Controller::Controller()
     _isVerbose = false;
 
     // Import saved data from previous session.
-    p = new client;
-    p->init();
-    p->importList("saved_data.txt");
-    p->uinit();
-    delete p;
-    p = NULL;
 }
 
 Controller::~Controller()
 {
-    // Export saved data to disk.
-    p = new client;
-    p->init();
-    p->exportList("saved_data.txt");
-    p->uinit();
-    delete p;
-    p = NULL;
 }
 
 
